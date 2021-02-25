@@ -1,3 +1,5 @@
+# API link: https://randomuser.me/
+
 from airflow.models import DAG
 from airflow.providers.sqlite.operators.sqlite import SqliteOperator
 from airflow.providers.http.sensors.http import HttpSensor
@@ -13,6 +15,7 @@ import json
 default_args = {
     'start_date': datetime(2020, 1, 1),
 }
+
 
 def _processing_user(ti):
     users = ti.xcom_pull(task_ids=['extracting_user'])
@@ -31,11 +34,11 @@ def _processing_user(ti):
 
 
 with DAG(
-        'user_processing',
-        schedule_interval='@daily',
-        default_args=default_args,
-        catchup=True
-        ) as dag:
+    'user_processing',
+    schedule_interval='@daily',
+    default_args=default_args,
+    catchup=True
+    ) as dag:
 
     creating_table = SqliteOperator(
         task_id='creating_table',
